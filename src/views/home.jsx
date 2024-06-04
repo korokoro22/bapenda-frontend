@@ -1,10 +1,34 @@
+import { useEffect, useState } from "react";
+
 export default function Home() {
+
+    const [suratMasuk, setSuratMasuk] = useState([]);
+
+    const fetchDataSuratMasuk = async () => {
+        //fetch data from API with Axios
+        // await Api.get('/surat-masuk')
+        await Api.get(`/surat-masuk?query=${query}`)
+          .then((response) => {
+            //assign response data to state "posts"
+            setSuratMasuk(response.data.data);
+          })
+      };
+
+      
+
+      useEffect(() => {
+        //call method "fetchDataPosts"
+        fetchDataSuratMasuk();
+      }, []);
+
     return (
-        <div className="p-5 mb-4 bg-light rounded-3">
-            <div className="container-fluid py-5">
-                <h1 className="font-inter">REACT (VITE) + LARAVEL 10</h1>
-                <p className="text-3xl font-bold underline text-center">Belajar CRUD dengan React dan Laravel 10 di SantriKoding.com</p>
+        <>
+            <div>
+                <div>
+                    home
+                </div>
             </div>
-        </div>
+        </>
+
     )
 }
