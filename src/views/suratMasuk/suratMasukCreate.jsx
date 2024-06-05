@@ -42,7 +42,7 @@ export default function suratMasukCreate() {
         data.append('tglteruskan', suratMasukInput.tglteruskan)
         data.append('namafile', namaFile)
 
-        await Api.post("http://127.0.0.1/kp2/api-web-bapenda/public/api/surat-masuk", data, {headers: {"Content-Type": "multipart/form-data"}})
+        await Api.post("http://127.0.0.1/kp/bapenda-backend/public/api/surat-masuk", data, {headers: {"Content-Type": "multipart/form-data"}})
             .then(response => {
                 if(response.status === 200) {
                     window.location = "/surat-masuk"

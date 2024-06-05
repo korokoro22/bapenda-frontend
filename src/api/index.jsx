@@ -9,7 +9,7 @@ const Api = axios.create({
   //set default endpoint API
   // baseURL: 'http://127.0.0.1:8000'
 
-  baseURL: "http://127.0.0.1/kp2/api-web-bapenda/public/api",
+  baseURL: "http://127.0.0.1/kp/bapenda-backend/public/api",
   headers: {
     Authorization: `Bearer ${getToken()}`,
   },

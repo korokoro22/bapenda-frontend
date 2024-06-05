@@ -14,6 +14,7 @@ export default function suratMasukIndex() {
 
   //pagination
   const [pageNumber, setPageNumber] = useState(0)
+  const [pageCount, setPageCount] = useState(0)
   const itemsPerPage = 2
 
   const [query, setQuery] = useState('')
@@ -35,23 +36,21 @@ export default function suratMasukIndex() {
     return suratMasuk.slice(startIndex, startIndex + itemsPerPage);
   };
 
-  const pageCount = Math.ceil(suratMasuk.length / itemsPerPage);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    window.location.href = '/login'
-  }
-
-
   //run hook useEffect
   useEffect(() => {
     //call method "fetchDataPosts"
     fetchDataSuratMasuk();
   }, []);
 
+  useEffect(()=> {
+    if (suratMasuk.length > 0) {
+      setPageCount(Math.ceil(suratMasuk.length / itemsPerPage))
+    }
+  }, [suratMasuk])
+
   const deleteDataSuratMasuk = async (id) => {
     await Api.delete(
-      `http://127.0.0.1/kp2/api-web-bapenda/public/api/surat-masuk/${id}`
+      `http://127.0.0.1/kp/bapenda-backend/public/api/surat-masuk/${id}`
     ).then((response) => {
       setSuratMasuk(response.data.data);
     });
@@ -76,10 +75,6 @@ export default function suratMasukIndex() {
             TAMBAH DATA
           </Link>
         </div>
-        <div className="ml-14 mt-6">
-          <button className="bg-blue-500 p-2 rounded-md text-white hover:bg-blue-700 font-inter" onClick={handleLogout}>logout</button>
-        </div>
-
         <div>
           <div className="w-11/12 mx-auto mt-4">
               <div className="relative mb-4 flex w-full flex-wrap items-stretch">
@@ -134,9 +129,8 @@ export default function suratMasukIndex() {
               </tr>
             </thead>
             <tbody className="font-inter">
-              {/* {suratMasuk &&
-                suratMasuk.map((suratMasuk, index) => ( */}
-                {getSuratMasukPerPage().map((suratMasuk, index) => (
+              {suratMasuk &&
+                suratMasuk.map((suratMasuk, index) => (
                   <tr key={index}>
                     <td scope="row" className="px-6 py-4">
                       {/* {{$masuk->nosurat}} */ suratMasuk.nosurat}
@@ -170,7 +164,7 @@ export default function suratMasukIndex() {
                     </td>
                     <td className="px-4 py-4">
                       <Link
-                        to=""
+                        to={`/surat-masuk/${suratMasuk.id}`}
                         className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded"
                       >
                         Edit
@@ -190,7 +184,8 @@ export default function suratMasukIndex() {
           </table>
         </div>
         {/* <div className="flex justify-end mt-5"> */}
-        <ReactPaginate
+        {pageCount > 0 && (
+          <ReactPaginate
           previousLabel={<span className="border p-2 rounded-md hover:bg-gray-300">Sebelumnya</span>}
           nextLabel={<span className="border p-2 rounded-md hover:bg-gray-300">Setelah</span>}
           breakLabel={'...'}
@@ -207,6 +202,8 @@ export default function suratMasukIndex() {
           pageClassName="w-10 h-10 block border hover:bg-l flex items-center justify-center mx-1 rounded-md hover:bg-gray-300"
           disabledClassName={'opacity-50 cursor-not-allowed'}
         />
+        )}
+        
         {/* </div> */}
       </div>
     </div>

@@ -27,13 +27,12 @@ export default function login() {
         data.append('email', formInput.email)
         data.append('password', formInput.password)
 
-        await axios.post("http://127.0.0.1/kp2/api-web-bapenda/public/api/login", data, {headers:{"Content-Type":"multipart/form-data"}})
+        await axios.post("http://127.0.0.1/kp/bapenda-backend/public/api/login", data, {headers:{"Content-Type":"multipart/form-data"}})
             .then(response => {
                 if (response.status === 200) {
                     const token = response.data.token
                     localStorage.setItem('token', token)
-
-                    navigate("/home")
+                    navigate("/")
                 }
             }).catch(err => console.log(err))
     }

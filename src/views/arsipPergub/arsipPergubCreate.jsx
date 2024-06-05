@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import Api from "../../api"
 
 
 export default function arsipPergubCreate() {
@@ -36,7 +37,7 @@ export default function arsipPergubCreate() {
         data.append('isiringkas', arsipPergubInput.isiringkas)
         data.append('namafile', namaFile)
 
-        await axios.post("http://127.0.0.1/kp2/api-web-bapenda/public/api/arsip-gubernur", data, {headers: {"Content-Type": "multipart/form-data"}})
+        await Api.post("http://127.0.0.1/kp/bapenda-backend/public/api/arsip-gubernur", data, {headers: {"Content-Type": "multipart/form-data"}})
             .then(response => {
                 console.log(response)
                 if(response.status === 200) {

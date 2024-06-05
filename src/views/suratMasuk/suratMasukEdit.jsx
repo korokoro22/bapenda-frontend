@@ -54,7 +54,7 @@ export default function suratMasukEdit() {
         data.append('namafile', namaFile)
         data.append('_method', 'PUT')
 
-        await axios.post(`http://127.0.0.1/kp2/api-web-bapenda/public/api/surat-masuk/${id}`, data, {headers: {"Content-Type": "multipart/form-data"}})
+        await Api.post(`http://127.0.0.1/kp/bapenda-backend/public/api/surat-masuk/${id}`, data, {headers: {"Content-Type": "multipart/form-data"}})
             .then(response => {
                 console.log(response)
                 if(response.status === 200) {
