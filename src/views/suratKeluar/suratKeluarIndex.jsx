@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "../../api";
 import ReactPaginate from "react-paginate";
+import DeleteModal from "../../component/deleteModal";
 
 export default function suratKeluarIndex() {
   const [suratKeluar, setSuratKeluar] = useState([]);
 
   const [pageNumber, setPageNumber] = useState(0);
-  const [pageCount, setPageCount] = useState(0)
+  const [pageCount, setPageCount] = useState(0);
   const itemsPerPage = 10;
 
   const [query, setQuery] = useState("");
@@ -30,18 +31,10 @@ export default function suratKeluarIndex() {
   }, []);
 
   useEffect(() => {
-    if(suratKeluar.length > 0) {
-      setPageCount(Math.ceil(suratKeluar.length / itemsPerPage))
+    if (suratKeluar.length > 0) {
+      setPageCount(Math.ceil(suratKeluar.length / itemsPerPage));
     }
-  }, [suratKeluar])
-
-  const deleteSuratKeluar = async (id) => {
-    await Api.delete(
-      `http://127.0.0.1/kp/bapenda-backend/public/api/surat-keluar/${id}`
-    ).then((response) => {
-      setSuratKeluar(response.data.data);
-    });
-  };
+  }, [suratKeluar]);
 
   const handleSearch = (event) => {
     fetchDataSuratKeluar();
@@ -110,81 +103,78 @@ export default function suratKeluarIndex() {
               </tr>
             </thead>
             <tbody className="font-inter">
-              {suratKeluar && suratKeluar.map((suratKeluar, index) => (
-                <tr key={index}>
-                  <td scope="row" className="px-6 py-4">
-                    {/* {{$masuk->nosurat}} */ suratKeluar.nosurat}
-                  </td>
-                  <td className="px-6 py-4">
-                    {/* {{$masuk->tglsurat}} */ suratKeluar.tglsurat}
-                  </td>
-                  <td className="px-6 py-4">
-                    {/* {{$masuk->perihal}} */ suratKeluar.perihal}
-                  </td>
-                  <td className="px-6 py-4">
-                    {/* {{$masuk->pengirim}} */ suratKeluar.kepada}
-                  </td>
-                  <td className="px-6 py-4">
-                    {/* {{$masuk->isiringkas}} */ suratKeluar.isiringkas}
-                  </td>
-                  <td className="px-4 py-4">
-                    {/* {{$masuk->namafile}} */}
-                    <Link
-                      to={`http://127.0.0.1:8000/storage/${suratKeluar.namafile}`}
-                      target="_blank"
-                    >
-                      {suratKeluar.namafile}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-4">
-                    <Link
-                      to={`/surat-keluar/${suratKeluar.id}`}
-                      className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded"
-                    >
-                      Edit
-                    </Link>
-                    <br />
-                    <button
-                      type="submit"
-                      className=" bg-red-500 hover:bg-red-700 text-white font-bold my-4 py-2 px-3 rounded"
-                      onClick={() => deleteSuratKeluar(suratKeluar.id)}
-                    >
-                      HAPUS
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {suratKeluar &&
+                suratKeluar.map((suratKeluar, index) => (
+                  <tr key={index}>
+                    <td scope="row" className="px-6 py-4">
+                      {/* {{$masuk->nosurat}} */ suratKeluar.nosurat}
+                    </td>
+                    <td className="px-6 py-4">
+                      {/* {{$masuk->tglsurat}} */ suratKeluar.tglsurat}
+                    </td>
+                    <td className="px-6 py-4">
+                      {/* {{$masuk->perihal}} */ suratKeluar.perihal}
+                    </td>
+                    <td className="px-6 py-4">
+                      {/* {{$masuk->pengirim}} */ suratKeluar.kepada}
+                    </td>
+                    <td className="px-6 py-4">
+                      {/* {{$masuk->isiringkas}} */ suratKeluar.isiringkas}
+                    </td>
+                    <td className="px-4 py-4">
+                      {/* {{$masuk->namafile}} */}
+                      <Link
+                        to={`http://127.0.0.1:8000/storage/${suratKeluar.namafile}`}
+                        target="_blank"
+                      >
+                        {suratKeluar.namafile}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex flex-col gap-2 items-center justify-between">
+                        <Link
+                          to={`/surat-keluar/${suratKeluar.id}`}
+                          className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded"
+                        >
+                          Edit
+                        </Link>
+                        <DeleteModal id={suratKeluar.id} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
-        {pageCount > 0 && (
-          <ReactPaginate
-          previousLabel={
-            <span className="border p-2 rounded-md hover:bg-gray-300">
-              Sebelumnya
-            </span>
-          }
-          nextLabel={
-            <span className="border p-2 rounded-md hover:bg-gray-300">
-              Setelah
-            </span>
-          }
-          breakLabel={"..."}
-          pageCount={pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={(data) => setPageNumber(data.selected)}
-          containerClassName={"flex items-center justify-center"}
-          activeClassName="bg-red-500 text-white"
-          // pageLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
-          // previousLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
-          // nextLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
-          // breakLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
-          pageClassName="w-10 h-10 block border hover:bg-l flex items-center justify-center mx-1 rounded-md hover:bg-gray-300"
-          disabledClassName={"opacity-50 cursor-not-allowed"}
-        />
-        )}
-        
+        <div className=" mb-5">
+          {pageCount > 0 && (
+            <ReactPaginate
+              previousLabel={
+                <span className="border p-2 rounded-md hover:bg-gray-300">
+                  Sebelumnya
+                </span>
+              }
+              nextLabel={
+                <span className="border p-2 rounded-md hover:bg-gray-300">
+                  Setelah
+                </span>
+              }
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={(data) => setPageNumber(data.selected)}
+              containerClassName={"flex items-center justify-center"}
+              activeClassName="bg-red-500 text-white"
+              // pageLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
+              // previousLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
+              // nextLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
+              // breakLinkClassName={'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded mb-1'}
+              pageClassName="w-10 h-10 block border hover:bg-l flex items-center justify-center mx-1 rounded-md hover:bg-gray-300"
+              disabledClassName={"opacity-50 cursor-not-allowed"}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

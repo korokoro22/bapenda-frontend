@@ -8,7 +8,7 @@ export default function login() {
     const [login, setLogin] = useState({})
 
     const [formInput, setFormInput] = useState({
-        'email': '',
+        'name': '',
         'password':''
     })
 
@@ -24,7 +24,7 @@ export default function login() {
 
     const getToken = async () => {
         const data = new FormData()
-        data.append('email', formInput.email)
+        data.append('name', formInput.name)
         data.append('password', formInput.password)
 
         await axios.post("http://127.0.0.1/kp/bapenda-backend/public/api/login", data, {headers:{"Content-Type":"multipart/form-data"}})
@@ -46,7 +46,7 @@ export default function login() {
                     <p className="font-inter text-5xl font-bold">LOGIN</p>
                     <div className=" mt-14 grid gap-y-14">
                         <div className="">
-                            <input className="border-b-2 border-black h-12 w-full focus:outline-none text-lg" type="text" placeholder="masukkan username" name="email" onChange={handleChange} value={formInput.email} />
+                            <input className="border-b-2 border-black h-12 w-full focus:outline-none text-lg" type="text" placeholder="masukkan username" name="name" onChange={handleChange} value={formInput.name} />
                         </div>
                         <div>
                             <input className="border-b-2 border-black h-12 w-full focus:outline-none text-lg" type="password" placeholder="masukkan password" name="password" onChange={handleChange} value={formInput.password} />
